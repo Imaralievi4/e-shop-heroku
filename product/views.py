@@ -3,7 +3,7 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions as p, viewsets, status
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, #RetrieveAPIView,
+from rest_framework.generics import ListAPIView #RetrieveAPIView,
     # CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
