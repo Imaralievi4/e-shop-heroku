@@ -1,16 +1,13 @@
-import permission as permission
 from django.db.models import Q
-from django.shortcuts import render
 
-# from rest_framework.decorators import api_view
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions as p, viewsets, status
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, RetrieveAPIView, \
-    CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, #RetrieveAPIView,
+    # CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
+
 
 from .filters import ProductFilter
 from .models import Product, Category
