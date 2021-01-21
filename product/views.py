@@ -3,16 +3,16 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions as p, viewsets, status
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView #RetrieveAPIView,
-    # CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView  # RetrieveAPIView,
+    # UpdateAPIView, DestroyAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 
 from .filters import ProductFilter
-from .models import Product, Category
+from .models import Product, Category, Comment
 from .serializers import ProductSerializer, \
-    CategorySerializer, CreateUpdateProductSerializer
+    CategorySerializer, CreateUpdateProductSerializer, CommentSerializer, ProductListSerializer
 
 
 # 1 вариант
@@ -60,7 +60,7 @@ from .serializers import ProductSerializer, \
 
 
 class MyPagination(PageNumberPagination):
-    page_size = 1
+    page_size = 5
 
 
 class CategoriesList(ListAPIView):
@@ -77,8 +77,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_class = ProductFilter
 
     def get_serializer_class(self):
-        if self.action == 'list' or self.action == 'retrieve':
+        if self.action == 'retrieve':
             return ProductSerializer
+        elif self.action == 'list':
+            return ProductListSerializer
         return CreateUpdateProductSerializer
 
     def get_permissions(self):
@@ -98,3 +100,12 @@ class ProductViewSet(viewsets.ModelViewSet):
                             Q(description__icontains=q))
         serializer = ProductSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CommentCreate(CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [p.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
